@@ -1,11 +1,10 @@
 import sys
-import shutil
 import os
 
 def main():
 
     
-    builtIns = ["exit", "echo", "type"]
+    builtIns = ["exit", "echo", "type", "pwd"]
 
     while True:
 
@@ -42,6 +41,8 @@ def main():
                     print(f"{cmd_tail} is {current_path}")
                 else:
                      sys.stdout.write(f"{cmd_tail}: not found\n")
+            elif cmd == "pwd":
+                sys.stdout.write(os.get_cwd())
 
             else:
 
