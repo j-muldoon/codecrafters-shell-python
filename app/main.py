@@ -44,7 +44,7 @@ def main():
                 current_path = None
                 for path in paths:
                     if os.path.isfile(f"{path}/{cmd_tail}"):
-                        os.system(user_input)
+                        os.system(f"{path}/{cmd_tail}")
                 else:
                     sys.stdout.write(f"{user_input}: command not found\n")
 
