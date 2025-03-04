@@ -1,5 +1,5 @@
 import sys
-import os
+import shutil
 
 def path_search(check_item, path_input):
     
@@ -18,10 +18,6 @@ def path_search(check_item, path_input):
         
 
 def main():
-
-
-    # "path" here is whatever format codecrafters gives it in?
-    path = os.environ["PATH"]
 
     while True:
         # Uncomment this block to pass the first stage
@@ -47,12 +43,9 @@ def main():
                 
                 if cmd_tail in builtins:
                     sys.stdout.write(f"{cmd_tail} is a shell builtin\n")
-                else: 
-                    path_check, path_to = path_search(cmd_tail, path)
-                    if path_check:
-                        joined_path = "/".join(path_to)
-                        sys.stdout.write(f"{cmd_tail} is {joined_path}\n")
-                    else:
+                elif path := shutil.which(cmd_tail):
+                    print(f"{cmd_tail} is {path}")
+                else:
                         sys.stdout.write(f"{cmd_tail}: not found\n")
 
 
