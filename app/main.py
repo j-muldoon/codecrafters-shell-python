@@ -21,7 +21,7 @@ def main():
 
 
     # "path" here is whatever format codecrafters gives it in?
-    path = os.environ("PATH")
+    path = os.environ["PATH"]
 
     while True:
         # Uncomment this block to pass the first stage
