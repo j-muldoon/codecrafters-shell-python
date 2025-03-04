@@ -20,7 +20,7 @@ def main():
 
 
     # "path" here is whatever format codecrafters gives it in?
-    PATH = path
+    PATH = PATH
 
     while True:
         # Uncomment this block to pass the first stage
