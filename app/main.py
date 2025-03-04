@@ -33,9 +33,9 @@ def main():
                 else:
                         sys.stdout.write(f"{cmd_tail}: not found\n")
 
-            # os obtains path info from the environment by default
+            # os obtains path info from the environment by default, need to navigate to files directory first?
             elif os.path.isfile(cmd):
-                 os.system(cmd)
+                 os.system(user_input)
             
             else:
                 sys.stdout.write(f"{user_input}: command not found\n")
