@@ -42,7 +42,7 @@ def main():
                 else:
                      sys.stdout.write(f"{cmd_tail}: not found\n")
             elif cmd == "pwd":
-                sys.stdout.write(os.get_cwd())
+                sys.stdout.write(f"{os.getcwd()}\n")
 
             else:
 
