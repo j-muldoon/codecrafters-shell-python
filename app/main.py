@@ -4,7 +4,7 @@ import os
 
 def main():
 
-    path = os.environ('PATH')
+    path = os.environ['PATH']
     builtIns = ["exit", "echo", "type"]
 
     while True:
