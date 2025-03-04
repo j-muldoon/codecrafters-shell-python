@@ -5,7 +5,7 @@ def main():
 
     while True:
         # Uncomment this block to pass the first stage
-        sys.stdout.write("Enter QUIT to exit\n$ ")
+        sys.stdout.write("$ ")
 
         # Wait for user input
         command = input()
