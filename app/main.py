@@ -4,7 +4,8 @@ import os
 
 def main():
 
-    path = os.environ['PATH']
+    PATH = os.environ.get("PATH", "")
+    paths = PATH.split(":")
     builtIns = ["exit", "echo", "type"]
 
     while True:
@@ -26,19 +27,26 @@ def main():
                 sys.stdout.write(f"{cmd_tail}\n")
 
             elif cmd == "type":
+                current_path = None
+                for path in paths:
+                    if os.path.isfile(f"{path}/{cmd_tail}"):
+                        current_path = f"{path}/{cmd_tail}"
                 if cmd_tail in builtIns:
                     sys.stdout.write(f"{cmd_tail} is a shell builtin\n")
-                elif path := shutil.which(cmd_tail):
-                    print(f"{cmd_tail} is {path}")
+                elif current_path:
+                    print(f"{cmd_tail} is {current_path}")
                 else:
-                        sys.stdout.write(f"{cmd_tail}: not found\n")
+                     sys.stdout.write(f"{cmd_tail}: not found\n")
 
-            # os obtains path info from the environment by default, need to navigate to files directory first?
-            elif os.path.isfile(cmd):
-                 os.system(user_input)
-            
             else:
-                sys.stdout.write(f"{user_input}: command not found\n")
+
+                # Execute executable or skip
+                current_path = None
+                for path in paths:
+                    if os.path.isfile(f"{path}/{cmd_tail}"):
+                        os.system(cmd)
+                else:
+                    sys.stdout.write(f"{user_input}: command not found\n")
 
 
         except OSError as err:
