@@ -5,10 +5,13 @@ def main():
 
     while True:
         # Uncomment this block to pass the first stage
-        sys.stdout.write("$ ")
+        sys.stdout.write("Enter QUIT to exit\n$ ")
 
         # Wait for user input
         command = input()
+
+        if command == "QUIT":
+            break
 
         print(f"{command}: command not found")
 
