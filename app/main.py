@@ -18,7 +18,7 @@ def main():
         try:
 
             if cmd == "exit":
-                sys.exit(cmd_tail)
+                sys.exit(int(cmd_tail))
             elif cmd == "echo":
                 print(cmd_tail)
             elif cmd == "type":
