@@ -1,4 +1,5 @@
 import sys
+import os
 
 def path_search(check_item, path_input):
     
@@ -20,7 +21,7 @@ def main():
 
 
     # "path" here is whatever format codecrafters gives it in?
-    # PATH = PATH
+    path = os.environ("PATH")
 
     while True:
         # Uncomment this block to pass the first stage
