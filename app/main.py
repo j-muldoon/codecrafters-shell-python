@@ -48,6 +48,7 @@ def main():
                 for path in paths:
                     if os.path.isfile(f"{path}/{cmd}"):
                         os.system(user_input)
+                        break
                 else:
                     sys.stdout.write(f"{user_input}: command not found\n")
 
