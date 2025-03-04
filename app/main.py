@@ -8,18 +8,26 @@ def main():
         sys.stdout.write("$ ")
 
         # Wait for user input
-        command = input()
-        words = command.split(" ")
+        user_input = input()
+        words = user_input.split(" ")
+        cmd = words[0]
+        cmd_tail = " ".join(words[1:])
+
+        builtins = ["exit", "echo", "type"]
 
         try:
 
-            if words[0] == "exit":
-                sys.exit(int(words[1]))
-            elif words[0] == "echo":
-                print(" ".join(words[1:]))
-                continue
+            if cmd == "exit":
+                sys.exit(cmd_tail)
+            elif cmd == "echo":
+                print(cmd_tail)
+            elif cmd == "type":
+                if cmd_tail in builtins:
+                    print(f"{cmd_tail} is a shell builtin")
+                else:
+                    print(f"{cmd_tail}: command not found")
             else:
-                print(f"{command}: command not found")
+                print(f"{user_input}: command not found")
 
         except OSError as err:
             print("OS error:", err)
