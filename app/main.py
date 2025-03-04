@@ -7,9 +7,7 @@ def main():
     PATH = os.environ.get("PATH", "")
     paths = PATH.split(":")
     builtIns = ["exit", "echo", "type"]
-
-    print(PATH)
-
+    
     while True:
         # Uncomment this block to pass the first stage
         sys.stdout.write("$ ")
