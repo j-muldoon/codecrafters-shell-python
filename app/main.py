@@ -9,11 +9,25 @@ def main():
 
         # Wait for user input
         command = input()
+        words = command.split(" ")
 
-        if command == "exit 0":
-            break
+        try:
 
-        print(f"{command}: command not found")
+            if words[0] == "exit":
+                sys.exit(int(words[1]))
+            elif words[0] == "echo":
+                print(" ".join(words[1:]))
+                continue
+            else:
+                print(f"{command}: command not found")
+
+        except OSError as err:
+            print("OS error:", err)
+        except ValueError:
+            print("Could not convert data to an integer.")
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
+            raise
 
 
 if __name__ == "__main__":
