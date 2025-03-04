@@ -25,7 +25,7 @@ def main():
                 if cmd_tail in builtins:
                     print(f"{cmd_tail} is a shell builtin")
                 else:
-                    print(f"{cmd_tail}: command not found")
+                    print(f"{cmd_tail}: not found")
             else:
                 print(f"{user_input}: command not found")
 
