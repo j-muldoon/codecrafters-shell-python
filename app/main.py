@@ -1,6 +1,8 @@
 import sys
 import os
 
+# TODO: Refactor to use match-case instead of elifs
+
 def main():
 
     
@@ -43,6 +45,11 @@ def main():
                      sys.stdout.write(f"{cmd_tail}: not found\n")
             elif cmd == "pwd":
                 sys.stdout.write(f"{os.getcwd()}\n")
+            elif cmd == "cd":
+                try:
+                    os.chdir(cmd_tail)
+                except OSError as err:
+                    sys.stdout.write(f"cd: {cmd_tail}: No such file or directory\n")
 
             else:
 
@@ -55,13 +62,13 @@ def main():
                 else:
                     sys.stdout.write(f"{user_input}: command not found\n")
 
-
+        # The tester likes a certain error output
         except OSError as err:
-            print("OS error:", err)
+            sys.stdout.write(f"OS error: {err}\n")
         except ValueError:
-            print("Could not convert data to an integer.")
+            sys.stdout.write("Could not convert data to an integer\n")
         except Exception as err:
-            print(f"Unexpected {err=}, {type(err)=}")
+            sys.stdout.write(f"Unexpected {err=}, {type(err)=}\n")
             raise
 
 
