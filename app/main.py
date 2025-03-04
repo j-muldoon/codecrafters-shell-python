@@ -2,11 +2,13 @@ import sys
 import os
 
 # TODO: Refactor to use match-case instead of elifs
+# Can even make functions as well
+#  Current task: GQ9 The cd builtin: Relative paths
 
 def main():
 
     
-    builtIns = ["exit", "echo", "type", "pwd"]
+    builtIns = ["exit", "echo", "type", "pwd", "cd"]
 
     while True:
 
