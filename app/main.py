@@ -1,7 +1,26 @@
 import sys
 
+def path_search(check_item, path_input):
+    
+    # Going to brute force it, but better way would be to use hash table to not go into directories that have already been covered
+
+    directories = path_input.split(":")
+
+    for directory in directories:
+        layers = directory.split("/")
+        path_as_list = []
+        for layer in layers:
+            path_as_list.append(layer)
+            if check_item == layer:
+                return True, path_as_list
+    return False, None
+        
 
 def main():
+
+
+    # "path" here is whatever format codecrafters gives it in?
+    PATH = path
 
     while True:
         # Uncomment this block to pass the first stage
@@ -16,18 +35,25 @@ def main():
         builtins = ["exit", "echo", "type"]
 
         try:
-
-            if cmd == "exit":
+            
+            if cmd not in builtins:
+                sys.stdout.write(f"{user_input}: command not found\n")
+            elif cmd == "exit":
                 sys.exit(int(cmd_tail))
             elif cmd == "echo":
-                print(cmd_tail)
+                sys.stdout.write(f"{cmd_tail}\n")
             elif cmd == "type":
+                
                 if cmd_tail in builtins:
-                    print(f"{cmd_tail} is a shell builtin")
-                else:
-                    print(f"{cmd_tail}: not found")
-            else:
-                print(f"{user_input}: command not found")
+                    sys.stdout.write(f"{cmd_tail} is a shell builtin\n")
+                else: 
+                    path_check, path_to = path_search(cmd_tail, PATH)
+                    if path_check:
+                        joined_path = "/".join(path_to)
+                        sys.stdout.write(f"{cmd_tail} is {joined_path}\n")
+                    else:
+                        sys.stdout.write(f"{cmd_tail}: not found\n")
+
 
         except OSError as err:
             print("OS error:", err)
