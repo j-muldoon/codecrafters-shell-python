@@ -13,6 +13,7 @@ def main():
     while True:
 
         PATH = os.environ.get("PATH", "")
+        HOME = os.environ.get("HOME")
         paths = PATH.split(":")
 
         # Uncomment this block to pass the first stage
@@ -51,7 +52,10 @@ def main():
                 try:
                     os.chdir(cmd_tail)
                 except OSError as err:
-                    sys.stdout.write(f"cd: {cmd_tail}: No such file or directory\n")
+                    if cmd_tail == "~":
+                        os.chdir(HOME)
+                    else:
+                        sys.stdout.write(f"cd: {cmd_tail}: No such file or directory\n")
 
             else:
 
