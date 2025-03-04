@@ -20,7 +20,7 @@ def main():
 
 
     # "path" here is whatever format codecrafters gives it in?
-    PATH = PATH
+    # PATH = PATH
 
     while True:
         # Uncomment this block to pass the first stage
@@ -47,7 +47,7 @@ def main():
                 if cmd_tail in builtins:
                     sys.stdout.write(f"{cmd_tail} is a shell builtin\n")
                 else: 
-                    path_check, path_to = path_search(cmd_tail, PATH)
+                    path_check, path_to = path_search(cmd_tail, path)
                     if path_check:
                         joined_path = "/".join(path_to)
                         sys.stdout.write(f"{cmd_tail} is {joined_path}\n")
