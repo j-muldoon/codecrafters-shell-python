@@ -1,76 +1,53 @@
 import sys
+import shutil
 import os
-
-def find_in_path(param):
-
-    path = os.environ['PATH']
-
-    print("Path: " + path)
-
-    print(f"Param: {param}")
-
-    for directory in path.split(":"):
-
-        for (dirpath, dirnames, filenames) in os.walk(directory):
-
-            if param in filenames:
-
-                return f"{dirpath}/{param}"
-
-    return None
 
 def main():
 
-    while True:
+    builtIns = ["exit", "echo", "type"]
 
+    while True:
+        # Uncomment this block to pass the first stage
         sys.stdout.write("$ ")
 
-        sys.stdout.flush()
-
         # Wait for user input
+        user_input = input()
+        words = user_input.split(" ")
+        cmd = words[0]
+        cmd_tail = " ".join(words[1:])
 
-        command = input()
+        try:
 
-        match command.split(" "):
+            if cmd == "exit":
+                sys.exit(int(cmd_tail))
 
-            case ["exit", "0"]:
+            elif cmd == "echo":
+                sys.stdout.write(f"{cmd_tail}\n")
 
-                exit(0)
-
-            case ["echo", *cmd]:
-
-                print(" ".join(cmd))
-
-            case ["type", *cmd]:
-
-                match cmd:
-
-                    case ["echo" | "exit" | "type"]:
-
-                        print(f"${cmd[0]} is a shell builtin")
-
-                    case _:
-
-                        location = find_in_path(cmd[0])
-
-                        if location:
-
-                            print(f"${cmd[0]} is {location}")
-
-                        else:
-
-                            print(f"${" ".join(cmd)} not found")
-
-            case _:
-
-                if os.path.isfile(command.split(" ")[0]):
-
-                    os.system(command)
-
+            elif cmd == "type":
+                if cmd_tail in builtIns:
+                    sys.stdout.write(f"{cmd_tail} is a shell builtin\n")
+                elif path := shutil.which(cmd_tail):
+                    print(f"{cmd_tail} is {path}")
                 else:
+                        sys.stdout.write(f"{cmd_tail}: not found\n")
 
-                    print(f"{command}: command not found")
+            # os obtains path info from the environment by default
+            elif os.path.isfile(cmd):
+                 os.system(cmd)
+            
+            else:
+                sys.stdout.write(f"{user_input}: command not found\n")
+
+
+        except OSError as err:
+            print("OS error:", err)
+        except ValueError:
+            print("Could not convert data to an integer.")
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
+            raise
+
 
 if __name__ == "__main__":
-
     main()
