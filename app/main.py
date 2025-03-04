@@ -4,11 +4,14 @@ import os
 
 def main():
 
-    PATH = os.environ.get("PATH", "")
-    paths = PATH.split(":")
-    builtIns = ["exit", "echo", "type"]
     
+    builtIns = ["exit", "echo", "type"]
+
     while True:
+
+        PATH = os.environ.get("PATH", "")
+        paths = PATH.split(":")
+
         # Uncomment this block to pass the first stage
         sys.stdout.write("$ ")
 
