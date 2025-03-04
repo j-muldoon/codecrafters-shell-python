@@ -32,8 +32,10 @@ def main():
             elif cmd == "type":
                 current_path = None
                 for path in paths:
+                    # Error here the path is incorrect (but only for exe files?? not always)
                     if os.path.isfile(f"{path}/{cmd_tail}"):
                         current_path = f"{path}/{cmd_tail}"
+                        break
                 if cmd_tail in builtIns:
                     sys.stdout.write(f"{cmd_tail} is a shell builtin\n")
                 elif current_path:
