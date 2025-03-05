@@ -1,6 +1,7 @@
 import sys
 import os
 import shlex
+import readline
 
 # TODO: Refactor to use match-case instead of elifs
 # Can even make functions as well
@@ -32,12 +33,31 @@ def write_output(output, filepath_location, output_type):
 
     else:
         sys.stdout.write(output)
+    
+    return
+
+def completer(text, state):
+
+    """Autocomplete function for built-in commands."""
+
+    builtin = ["echo ", "exit ", "type ", "pwd ", "cd "]
+
+    matches = [cmd for cmd in builtin if cmd.startswith(text)]
+
+    return matches[state] if state < len(matches) else None
+
             
 
 def main():
 
     
     builtIns = ["exit", "echo", "type", "pwd", "cd"]
+
+    # Set up autocomplete
+
+    readline.set_completer(completer)
+
+    readline.parse_and_bind("tab: complete")
 
     while True:
 
