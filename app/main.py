@@ -21,9 +21,14 @@ def main():
 
         # Wait for user input
         user_input = input()
+        # split on single quotes as well somehow?
         words = user_input.split(" ")
         cmd = words[0]
         cmd_tail = " ".join(words[1:])
+
+        # split on ', and also, strip in echo
+
+        
 
         try:
 
@@ -31,7 +36,21 @@ def main():
                 sys.exit(int(cmd_tail))
 
             elif cmd == "echo":
-                sys.stdout.write(f"{cmd_tail}\n")
+
+                # The idea is to strip single quote, and split, join double quote
+                in_single_quote = False
+                if "'" in cmd_tail:
+                    output = cmd_tail.strip("\'")
+                    output = output.replace("\'", "")
+                    sys.stdout.write(f"{output}\n")
+
+                # 
+                else:
+                    no_ws = user_input.split()
+                    no_ws_tail = " ".join(no_ws[1:])
+                    output = no_ws_tail.strip("\"")
+                    output = output.replace("\"", "")
+                    sys.stdout.write(f"{output}\n")
 
             elif cmd == "type":
                 current_path = None
