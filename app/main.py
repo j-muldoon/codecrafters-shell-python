@@ -10,9 +10,15 @@ def write_output(output, filepath_location, output_type):
     if filepath_location and output_type == "out":
         with open(filepath_location, 'w') as f:
             f.write(output)
-    elif filepath_location and output_type == "err":
+    elif filepath_location and (output_type == "err" or output_type == "append_err"):
         sys.stdout.write(output)
-        with open(filepath_location, 'w') as f:
+
+        if output_type == "err":
+            file_mode = 'w'
+        else:
+            file_mode = 'a'
+
+        with open(filepath_location, file_mode) as f:
             if sys.exc_info()[0]:
                 f.write(",".join([sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2] ]))
             else:
@@ -70,6 +76,8 @@ def main():
                         output_type = "append"
                     elif (" 2> " in user_input):
                         output_type= "err"
+                    elif (" 2>> " in user_input):
+                        output_type= "append_err"
                         
 
                     filepath_location = args[i+1]
