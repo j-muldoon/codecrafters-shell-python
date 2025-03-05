@@ -6,17 +6,24 @@ import shlex
 # Can even make functions as well
 #  Current task: GQ9 The cd builtin: Relative paths
 
-def write_output(output, filepath_location, GLOBAL_red):
-    if filepath_location and GLOBAL_red == "out":
+def write_output(output, filepath_location, output_type):
+    if filepath_location and output_type == "out":
         with open(filepath_location, 'w') as f:
             f.write(output)
-    elif filepath_location and GLOBAL_red == "err":
+    elif filepath_location and output_type == "err":
         sys.stdout.write(output)
         with open(filepath_location, 'w') as f:
             if sys.exc_info()[0]:
                 f.write(",".join([sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2] ]))
             else:
                 f.write("")
+    elif filepath_location and output_type == "append":
+        with open(filepath_location, 'a') as f:
+            if output:
+                f.write(output)
+            else:
+                f.write("")
+
     else:
         sys.stdout.write(output)
             
@@ -49,7 +56,7 @@ def main():
         
         # file redirecting
         # vulnerability if someone just writes a "> " anywhere
-        GLOBAL_red = None
+        output_type = None
         filepath_location = None
         if "> " in user_input:
             for i, arg in enumerate(args):
@@ -58,9 +65,11 @@ def main():
                     # classify the redirect type
                     
                     if (" 1> " in user_input) or (" > " in user_input):
-                        GLOBAL_red = "out"
+                        output_type = "out"
+                    elif (" 1>> " in user_input) or (" >> " in user_input):
+                        output_type = "append"
                     elif (" 2> " in user_input):
-                        GLOBAL_red= "err"
+                        output_type= "err"
                         
 
                     filepath_location = args[i+1]
@@ -78,7 +87,7 @@ def main():
         elif cmd == "echo":
             insert = (" ".join(args[1:]))
             output = f"{insert}\n"
-            write_output(output, filepath_location, GLOBAL_red)
+            write_output(output, filepath_location, output_type)
 
         elif cmd == "type":
             current_path = None
@@ -88,16 +97,16 @@ def main():
                     break
             if cmd_tail in builtIns:
                 output = f"{cmd_tail} is a shell builtin\n"
-                write_output(output, filepath_location, GLOBAL_red)
+                write_output(output, filepath_location, output_type)
             elif current_path:
                 output = f"{cmd_tail} is {current_path}\n"
-                write_output(output, filepath_location, GLOBAL_red)
+                write_output(output, filepath_location, output_type)
             else:
                     output = f"{cmd_tail}: not found\n"
-                    write_output(output, filepath_location, GLOBAL_red)
+                    write_output(output, filepath_location, output_type)
         elif cmd == "pwd":
             output = f"{os.getcwd()}\n"
-            write_output(output, filepath_location, GLOBAL_red)
+            write_output(output, filepath_location, output_type)
         elif cmd == "cd":
             try:
                 os.chdir(cmd_tail)
@@ -106,7 +115,7 @@ def main():
                     os.chdir(HOME)
                 else:
                     output = f"cd: {cmd_tail}: No such file or directory\n"
-                    write_output(output, filepath_location, GLOBAL_red)
+                    write_output(output, filepath_location, output_type)
 
         else:
 
@@ -118,7 +127,7 @@ def main():
                     break
             else:
                 output = f"{user_input}: command not found\n"
-                write_output(output, filepath_location, GLOBAL_red)
+                write_output(output, filepath_location, output_type)
 
 
 if __name__ == "__main__":
