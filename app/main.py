@@ -1,9 +1,11 @@
 import sys
 import os
+import shlex
 
 # TODO: Refactor to use match-case instead of elifs
 # Can even make functions as well
 #  Current task: GQ9 The cd builtin: Relative paths
+            
 
 def main():
 
@@ -21,13 +23,15 @@ def main():
 
         # Wait for user input
         user_input = input()
-        # split on single quotes as well somehow?
+        command = user_input.strip()
+
+
         words = user_input.split(" ")
-        cmd = words[0]
         cmd_tail = " ".join(words[1:])
-
-        # split on ', and also, strip in echo
-
+        # notice the difference between words and args, that will probably be the cause of some errors
+        # note args[0] and words[0] will be equal unless the input begins with a quote (which will just be an unknown command)
+        args = shlex.split(command, posix=True)
+        cmd = args[0]
         
 
         try:
@@ -36,21 +40,7 @@ def main():
                 sys.exit(int(cmd_tail))
 
             elif cmd == "echo":
-
-                # The idea is to strip single quote, and split, join double quote
-                in_single_quote = False
-                if "'" in cmd_tail:
-                    output = cmd_tail.strip("\'")
-                    output = output.replace("\'", "")
-                    sys.stdout.write(f"{output}\n")
-
-                # 
-                else:
-                    no_ws = user_input.split()
-                    no_ws_tail = " ".join(no_ws[1:])
-                    output = no_ws_tail.strip("\"")
-                    output = output.replace("\"", "")
-                    sys.stdout.write(f"{output}\n")
+                sys.stdout.write(f"{" ".join(args[1:])}\n")
 
             elif cmd == "type":
                 current_path = None
