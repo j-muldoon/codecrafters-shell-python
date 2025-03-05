@@ -36,28 +36,14 @@ def write_output(output, filepath_location, output_type):
     
     return
 
-def completer(text, state):
 
-    """Autocomplete function for built-in commands."""
-
-    builtin = ["echo ", "exit ", "type ", "pwd ", "cd "]
-
-    matches = [cmd for cmd in builtin if cmd.startswith(text)]
-
-    return matches[state] if state < len(matches) else None
 
             
 
 def main():
 
     
-    builtIns = ["exit", "echo", "type", "pwd", "cd"]
-
-    # Set up autocomplete
-
-    readline.set_completer(completer)
-
-    readline.parse_and_bind("tab: complete")
+    
 
     while True:
 
@@ -65,11 +51,42 @@ def main():
         HOME = os.environ.get("HOME")
         paths = PATH.split(":")
 
-        # Uncomment this block to pass the first stage
-        sys.stdout.write("$ ")
+        executable_commands = []
+        for path in paths:
+            try:
+                for filename in os.listdir(path):
+                    fullpath = os.path.join(path, filename)
+                    if os.access(fullpath, os.X_OK):
+                        executable_commands.append(f"{filename} ")
+            except FileNotFoundError:
+                pass
+
+        def completer(text, state):
+
+            """Autocomplete function for built-in commands."""
+
+
+            builtin = ["echo ", "exit ", "type ", "pwd ", "cd "]
+
+            matches = [cmd for cmd in builtin if cmd.startswith(text)]
+            matches_exec_cmd = [cmd for cmd in executable_commands if cmd.startswith(text)]
+
+            for s in matches_exec_cmd:
+                matches.append(s)
+
+            return matches[state] if state < len(matches) else None
+        
+        builtIns = ["exit", "echo", "type", "pwd", "cd"]
+
+        # Set up autocomplete
+
+        readline.set_completer(completer)
+
+        readline.parse_and_bind("tab: complete")
+        
 
         # Wait for user input
-        user_input = input()
+        user_input = input("$ ")
         command = user_input.strip()
 
 
