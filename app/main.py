@@ -5,6 +5,13 @@ import shlex
 # TODO: Refactor to use match-case instead of elifs
 # Can even make functions as well
 #  Current task: GQ9 The cd builtin: Relative paths
+
+def write_output(output, filepath_location):
+    if filepath_location:
+        with open(filepath_location, 'w') as f:
+            f.write(output)
+    else:
+        sys.stdout.write(output)
             
 
 def main():
@@ -33,30 +40,50 @@ def main():
         args = shlex.split(command, posix=True)
         cmd = args[0]
         
+        # file redirecting
+        # vulnerability if someone just writes a "> " anywhere
+        filepath_location = None
+        if "> " in user_input:
+            for i, arg in enumerate(args):
+                if ">" in arg:
+                    filepath_location = args[i+1]
+                    # remove the redirect from the tail and args
+                    args = args[:i]
+                    cmd_tail = " ".join(words[1:i])
+                    break
+        
+
 
         try:
+
+            
+
 
             if cmd == "exit":
                 sys.exit(int(cmd_tail))
 
             elif cmd == "echo":
-                sys.stdout.write(f"{" ".join(args[1:])}\n")
+                output = f"{" ".join(args[1:])}\n"
+                write_output(output, filepath_location)
 
             elif cmd == "type":
                 current_path = None
                 for path in paths:
-                    # Error here the path is incorrect (but only for exe files?? not always)
                     if os.path.isfile(f"{path}/{cmd_tail}"):
                         current_path = f"{path}/{cmd_tail}"
                         break
                 if cmd_tail in builtIns:
-                    sys.stdout.write(f"{cmd_tail} is a shell builtin\n")
+                    output = f"{cmd_tail} is a shell builtin\n"
+                    write_output(output, filepath_location)
                 elif current_path:
-                    print(f"{cmd_tail} is {current_path}")
+                    output = f"{cmd_tail} is {current_path}\n"
+                    write_output(output, filepath_location)
                 else:
-                     sys.stdout.write(f"{cmd_tail}: not found\n")
+                     output = f"{cmd_tail}: not found\n"
+                     write_output(output, filepath_location)
             elif cmd == "pwd":
-                sys.stdout.write(f"{os.getcwd()}\n")
+                output = f"{os.getcwd()}\n"
+                write_output(output, filepath_location)
             elif cmd == "cd":
                 try:
                     os.chdir(cmd_tail)
@@ -64,7 +91,8 @@ def main():
                     if cmd_tail == "~":
                         os.chdir(HOME)
                     else:
-                        sys.stdout.write(f"cd: {cmd_tail}: No such file or directory\n")
+                        output = f"cd: {cmd_tail}: No such file or directory\n"
+                        write_output(output, filepath_location)
 
             else:
 
@@ -75,7 +103,8 @@ def main():
                         os.system(user_input)
                         break
                 else:
-                    sys.stdout.write(f"{user_input}: command not found\n")
+                    output = f"{user_input}: command not found\n"
+                    write_output(output, filepath_location)
 
         # The tester likes a certain error output
         except OSError as err:
