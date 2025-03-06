@@ -4,8 +4,7 @@ import shlex
 import readline
 
 # TODO: Refactor to use match-case instead of elifs
-# Can even make functions as well
-#  Current task: GQ9 The cd builtin: Relative paths
+# and change order/format of functions to be more efficient (remove function definitions from REPL if possible)
 
 def write_output(output, filepath_location, output_type):
     if filepath_location and output_type == "out":
