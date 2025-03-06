@@ -60,6 +60,12 @@ def main():
                         executable_commands.append(f"{filename} ")
             except FileNotFoundError:
                 pass
+        
+        def display_matches(substitution, matches, longest_match_length):
+            print()
+            if matches:
+                print(" ".join(matches))
+            print("$ " + substitution, end="")
 
         def completer(text, state):
 
@@ -74,15 +80,19 @@ def main():
             for s in matches_exec_cmd:
                 matches.append(s)
 
+            matches = list(set(matches))
+
             return matches[state] if state < len(matches) else None
         
         builtIns = ["exit", "echo", "type", "pwd", "cd"]
 
         # Set up autocomplete
 
+        
+        readline.set_completion_display_matches_hook(display_matches)
+        readline.parse_and_bind("tab: complete")
         readline.set_completer(completer)
 
-        readline.parse_and_bind("tab: complete")
         
 
         # Wait for user input
